@@ -18,11 +18,25 @@ dpy.for.cal <- function(cal) {
 }
 
 clean.cal <- function(cal) {
-  cal.list <- c("365_day", "365", "noleap", "360_day", "360", "gregorian",  "standard", "proleptic_gregorian")
-  cal.map <- c( "365",     "365", "365",    "360",     "360", "gregorian", "gregorian", "proleptic_gregorian")
-  if(!cal %in% cal.list) stop(paste("Calendar type not one of", paste(cal.list, sep=", ")))
+  cal.list <- c("365_day", "365", "noleap",
+                "360_day", "360",
+                "gregorian", "standard", "proleptic_gregorian")
+  cal.map  <- c("365", "365", "365",
+                "360", "360",
+                "gregorian", "gregorian", "proleptic_gregorian")
+  
+  # Default to gregorian if cal is NULL or length 0
+  if (is.null(cal) || length(cal) == 0) {
+    cal <- "gregorian"
+  }
+  
+  if (!cal %in% cal.list) {
+    stop(paste("Calendar type not one of", paste(cal.list, collapse=", ")))
+  }
+  
   return(cal.map[cal.list %in% cal])
 }
+
 
 .PCICt <- function(x, cal) {
   if(missing(cal)) stop("Can't create a PCICt with no calendar type")
